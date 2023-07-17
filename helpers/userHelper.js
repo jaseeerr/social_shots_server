@@ -261,6 +261,42 @@ module.exports = {
         })
     },
 
+    updatebio:(bio,id)=>{
+        return new Promise((resolve, reject) => {
+
+            User.findByIdAndUpdate(id,{
+                $set:{
+                    bio:bio
+                }
+            }).then(()=>{
+                resolve({success:true})
+            }).catch((err)=>{
+                console.log(err)
+            })
+            
+        })
+    },
+
+    updateactype:(x,id)=>{
+        return new Promise((resolve, reject) => {
+            let y = false
+            if(x==1)
+            {
+                y = true
+            }
+
+            User.findByIdAndUpdate(id,{
+                $set:{
+                    private:y
+                }
+            }).then((response)=>{
+                resolve({success:true})
+            })
+            
+            
+        })
+    },
+
     follow:(Fid,id)=>{
         return new Promise((resolve, reject) => {
             let x = {}

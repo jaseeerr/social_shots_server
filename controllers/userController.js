@@ -1,6 +1,7 @@
 const userHelper = require('../helpers/userHelper')
 const jwt = require('jsonwebtoken')
 const {nodeMailer} = require('../helpers/nodemailerHelper')
+const {nodeMailer1} = require('../helpers/emailUpdateMailer')
 const User = require("../models/userSchema")
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -96,10 +97,14 @@ userHelper.singup(req.body).then((response)=>{
     getUserdata:(req,res)=>{
 
         userHelper.getUserdata(req.params.id).then((data1)=>{
-
+             data1.password = ""
+             console.log(data1)
+           
+             const token = jwt.sign(  JSON.parse(JSON.stringify(data1)),process.env.ACCESS_TOKEN_SECRET)
             let data = {
                 data1,
-                own:false
+                own:false,
+                token:token
                 
             }
        
@@ -119,8 +124,11 @@ userHelper.singup(req.body).then((response)=>{
 
     myData:(req,res)=>{
 
-        userHelper.myData(req.user._id).then((data)=>{
+        console.log(req.user._id)
+        console.log("*************");
 
+        userHelper.myData(req.user._id).then((data)=>{
+       
             res.json(data)
 
         })
@@ -210,6 +218,35 @@ userHelper.singup(req.body).then((response)=>{
 
     },
 
+    updateEmail: async (req,res)=>{
+
+      nodeMailer1(req.user.email,req.params.id).then((response)=>{
+        console.log(response)
+        res.json(response)
+      })
+     
+     
+
+
+    },
+
+    updatebio:(req,res)=>{
+
+        userHelper.updatebio(req.params.id,req.user._id).then((response)=>{
+
+            res.json(response)
+        })
+
+    },
+
+    updateactype:(req,res)=>{
+
+        userHelper.updateactype(req.params.id,req.user._id).then((response)=>{
+            res.json(response)
+        })
+
+    },
+
     follow:(req,res)=>{
         console.log("FOLLoWE")
 
@@ -273,7 +310,7 @@ userHelper.singup(req.body).then((response)=>{
         jwt.verify(req.params.id,process.env.ACCESS_TOKEN_SECRET,(err, user)=>{
             
 
-            if(err) return res.render('verified')
+            if(err) return res.render('notVerified')
      
             User.findOneAndUpdate({email:user.email},{
                 $set:{
@@ -283,6 +320,39 @@ userHelper.singup(req.body).then((response)=>{
 
                 res.render('verified1')
             })
+          
+
+
+           
+            
+        })
+    },
+
+    verifyemail:(req,res)=>{
+
+jwt.verify(req.params.id,process.env.ACCESS_TOKEN_SECRET,(err, user)=>{
+            
+
+    console.log(err)
+    console.log(user)
+
+            if(err)
+            {    
+                return res.render('notVerified')
+            } 
+            else
+            {    console.log("uuuser")
+                User.findOneAndUpdate({email:user.email},{
+                    $set:{
+                        email:user.newMail
+                    }
+                }).then(()=>{
+    
+                    res.render('updatedEmail')
+                })
+            }
+     
+           
           
 
 

@@ -25,6 +25,9 @@ router.get('/checkusername/:id',userController.checkUsername)
 /* GET VERIFY EMAIL. */
 router.get('/verifyuser/:id',userController.verifyuser)
 
+/* GET UPDATE LINK EMAIL. */
+router.get('/verifyemail/:id',userController.verifyemail)
+
 /* GET SENT OTP. */
 router.get('/sentotp/:id',auth.userAuth,userController.sentOtp)
 
@@ -48,8 +51,17 @@ router.get('/getOnePost/:id',auth.userAuth,userController.getOnePost)
 /* GET UPDATE DP. */
 router.get('/updatedp/:id',auth.userAuth,userController.updateDp)
 
-/* GET CHECK USERNAME. */
+/* GET UPDATE USERNAME. */
 router.get('/updateusername/:id',auth.userAuth,userController.updateUsername)
+
+/* GET UPDATE EMAIL. */
+router.get('/update_email/:id',auth.userAuth,userController.updateEmail)
+
+/* GET UPDATE BIO. */
+router.get('/updatebio/:id',auth.userAuth,userController.updatebio)
+
+/* GET UPDATE AC TYPE. */
+router.get('/updateactype/:id',auth.userAuth,userController.updateactype)
 
 /* GET FOLLOW. */
 router.get('/follow/:id',auth.userAuth,userController.follow)
