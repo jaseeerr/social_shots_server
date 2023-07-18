@@ -301,13 +301,14 @@ module.exports = {
         return new Promise((resolve, reject) => {
             let x = {}
             let y = {}
+            let data
             User.findOne({username:id}).then((data1)=>{
                
                  x = {
                     uid:data1._id,
                     username:data1.username,
                     dp:data1.dp
-                }
+                     }
 
 
 
@@ -320,7 +321,8 @@ module.exports = {
                     {
                         User.findOneAndUpdate({username:Fid},{
                             $addToSet: { requests: x }
-                        }).then(()=>{
+                        }).then((data)=>{
+                          
                             console.log("done")
                         })
                     }
@@ -328,27 +330,32 @@ module.exports = {
                     {
                         User.findOneAndUpdate({username:Fid},{
                             $addToSet: { followers: x }
-                        }).then((res)=>{
-                            console.log(res)
+                        }).then((data)=>{
+                            console.log("AGANEY ATHUM AAYI11111111111")
+                                console.log(data)
                             y={
-                                uid:res._id,
-                                username:res.username,
-                                dp:res.dp
+                                uid:data._id,
+                                username:data.username,
+                                dp:data.dp
                             }
-                           
-                            console.log(y)
-                            console.log(x)
-                            console.log(id)
+                         
+                         
                             User.findOneAndUpdate({username:id},{
                                 $addToSet: { following: y }
                             }).then(()=>{
-                                console.log("AGANEY ATHUM AAYI")
+
+                                
+
+                                console.log("000")
+                                console.log(data)
+                                resolve({success:true,data:y})
                             })
                         })
                     }
                 })
             }).then(()=>{
-                resolve({success:true})
+               
+               
             }).catch((err)=>{
                 console.log(err.message)
                 console.log("err occurred")
@@ -370,15 +377,20 @@ module.exports = {
                         followers: { username: id },
                         requests:{username: id}
                     }
-                }).then(()=>{
+                }).then((data)=>{
 
-                    console.log("UNFOLLOWED")
+                    User.findById(data._id).then((data1)=>{
+                        console.log(data1)
+                        resolve({success:true,data1})
+                        console.log("UNFOLLOWED")
+                    })
+                   
 
                 })
                 
             }).then(()=>{
 
-                resolve({success:true})
+               
             })
             
         })

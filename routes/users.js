@@ -80,4 +80,6 @@ router.get('/allPosts',auth.userAuth,userController.getAllPosts)
 router.post('/uploadpost',auth.userAuth,userController.uploadPost)
 
 
+
+
 module.exports = router;
