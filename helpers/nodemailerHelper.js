@@ -84,7 +84,9 @@ console.log(min)
                             console.log("mail send")
 
                         }).catch((err)=>{
+                            console.log(err)
                             console.log(err.message)
+                            
                         })
 
                     })
