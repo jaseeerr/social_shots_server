@@ -28,7 +28,7 @@ app.use(
     origin: ['http://localhost:1234',
              'https://cyberkraft.online',
              'cyberkraft.online',
-             'https://ce10-49-37-234-13.ngrok-free.app/'
+             'https://ce10-49-37-234-13.ngrok-free.app'
   
   ],
     methods: ['GET', 'POST', 'PUT', 'PATCH'],
