@@ -69,7 +69,7 @@ module.exports = {
                  
                   const min = minutesSince(response.lastverified)
 console.log(min)
-                  if(min>=2)
+                  if(min>=1)
                   {
                    
 
