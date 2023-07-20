@@ -129,10 +129,10 @@ module.exports = {
     getUserdata:(id)=>{
 
         return new Promise((resolve, reject) => {
+           
             
             User.findOne({username:id}).then((data)=>{
 
-            
                 
                 resolve(data)
               
@@ -164,11 +164,22 @@ module.exports = {
         })
     },
 
-    getOnePost:(id)=>{
+    getOnePost:(id,ownId)=>{
         return new Promise((resolve, reject) => {
             
             Post.findById(id).then((data)=>{
-                resolve(data)
+
+                User.findById(data.uid).then((data1)=>{
+                    data.username = data1.username
+                    data.profilePicture = data1.dp
+                    if(data.uid==ownId)
+                    {
+                        data.own = true
+                    }
+                }).then(()=>{
+                    resolve(data)
+                })
+               
             })
         })
     },
@@ -348,7 +359,7 @@ module.exports = {
 
                                 console.log("000")
                                 console.log(data)
-                                resolve({success:true,data:y})
+                                resolve({success:true,data:x})
                             })
                         })
                     }

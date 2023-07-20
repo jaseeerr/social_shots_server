@@ -96,9 +96,9 @@ userHelper.singup(req.body).then((response)=>{
 
     getUserdata:(req,res)=>{
 
+        
         userHelper.getUserdata(req.params.id).then((data1)=>{
-             data1.password = ""
-             console.log(data1)
+            
            
              const token = jwt.sign(  JSON.parse(JSON.stringify(data1)),process.env.ACCESS_TOKEN_SECRET)
             let data = {
@@ -111,7 +111,7 @@ userHelper.singup(req.body).then((response)=>{
             if(req.user.username==req.params.id)
             {
               data.own = true
-            }
+            } 
           
             console.log(data)
             res.json(data)
@@ -148,7 +148,12 @@ userHelper.singup(req.body).then((response)=>{
 
         userHelper.getOnePost(req.params.id).then((data)=>{
 
-            res.json(data)
+            let own = false
+            if(data.uid==req.user._id)
+            {
+                own = true
+            }
+            res.json({data, own})
 
         })
 
