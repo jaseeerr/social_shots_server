@@ -41,7 +41,7 @@ const userSchema = new Schema({
     },
     dp:{
         type:String,
-        default:"dp_xjczw0.webp"
+        default:"dp1.jpg"
     },
     following:{
         type:Array,

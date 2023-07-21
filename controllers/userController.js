@@ -113,7 +113,6 @@ userHelper.singup(req.body).then((response)=>{
               data.own = true
             } 
           
-            console.log(data)
             res.json(data)
 
 
@@ -124,8 +123,7 @@ userHelper.singup(req.body).then((response)=>{
 
     myData:(req,res)=>{
 
-        console.log(req.user._id)
-        console.log("*************");
+    
 
         userHelper.myData(req.user._id).then((data)=>{
        
@@ -195,9 +193,7 @@ userHelper.singup(req.body).then((response)=>{
     verifyOtp:(req,res)=>{
 
         const {phone, otp} = req.query
-        console.log(phone,otp,req.user._id)
         userHelper.verifyOtp(phone,otp,req.user._id).then((response)=>{
-            console.log("FF IT WORKED")
             res.json(response)
         })
      
@@ -226,7 +222,6 @@ userHelper.singup(req.body).then((response)=>{
     updateEmail: async (req,res)=>{
 
       nodeMailer1(req.user.email,req.params.id).then((response)=>{
-        console.log(response)
         res.json(response)
       })
      
@@ -253,7 +248,6 @@ userHelper.singup(req.body).then((response)=>{
     },
 
     follow:(req,res)=>{
-        console.log("FOLLoWE")
 
         userHelper.follow(req.params.id,req.user.username).then((response)=>{
 
@@ -264,11 +258,19 @@ userHelper.singup(req.body).then((response)=>{
     },
 
     unfollow:(req,res)=>{
-        console.log("UNNNNFOLLoWE")
 
         userHelper.unfollow(req.params.id,req.user.username).then((response)=>{
 
            
+            res.json(response)
+        })
+
+    },
+
+    cancelRequest:(req,res)=>{
+
+        userHelper.cancelRequest(req.params.id,req.user._id).then((response)=>{
+
             res.json(response)
         })
 
@@ -338,15 +340,13 @@ userHelper.singup(req.body).then((response)=>{
 jwt.verify(req.params.id,process.env.ACCESS_TOKEN_SECRET,(err, user)=>{
             
 
-    console.log(err)
-    console.log(user)
 
             if(err)
             {    
                 return res.render('notVerified')
             } 
             else
-            {    console.log("uuuser")
+            {    
                 User.findOneAndUpdate({email:user.email},{
                     $set:{
                         email:user.newMail
@@ -377,6 +377,22 @@ jwt.verify(req.params.id,process.env.ACCESS_TOKEN_SECRET,(err, user)=>{
 
 
 
+        })
+    },
+
+    reportPost:(req,res)=>{
+
+        userHelper.reportPost(req.params.id,req.user._id).then((response)=>{
+
+            res.json(response)
+        })
+    },
+
+    deletePost:(req,res)=>{
+
+        userHelper.deletePost(req.params.id).then((response)=>{
+
+            res.json(response)
         })
     }
 

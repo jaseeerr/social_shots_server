@@ -23,6 +23,14 @@ const postSchema = new Schema({
         type:[],
         default:[]
     },
+    reported:{
+        type:[],
+        default:[]
+    },
+    private:{
+        type:Boolean,
+        default:false
+    }
     
   
    

@@ -133,8 +133,14 @@ module.exports = {
             
             User.findOne({username:id}).then((data)=>{
 
-                
+                console.log("oooooo");
+                console.log(data)
+                if(data==null)
+                {
+                    data = {}
+                }
                 resolve(data)
+
               
 
             })
@@ -144,7 +150,9 @@ module.exports = {
     myData:(id)=>{
 
         return new Promise((resolve, reject) => {
+        
             User.findById(id).then((data)=>{
+            
                 resolve(data)
             })
         })
@@ -154,11 +162,16 @@ module.exports = {
     getMyPosts:(id)=>{
         return new Promise((resolve, reject) => {
 
- 
-            Post.find({username:id}).then((data)=>{
-                data = data.reverse()
-                resolve(data)
+            User.findOne({username:id}).then((data1)=>{
+
+                Post.find({uid:data1._id}).then((data)=>{
+                    data = data.reverse()
+                    resolve(data)
+                })
+
             })
+ 
+          
             
 
         })
@@ -219,7 +232,7 @@ module.exports = {
                     resolve({success:true})
                 }).catch((err)=>{
                     console.log(err)
-                    console.log("OTP ERROR OCCURED")
+                 
                     resolve({success:false})
                 })
 
@@ -301,7 +314,16 @@ module.exports = {
                     private:y
                 }
             }).then((response)=>{
-                resolve({success:true})
+
+                Post.updateMany({uid:id},{
+                    $set:{
+                        private:y
+                    }
+                }).then(()=>{
+
+                    resolve({success:true})
+                })
+               
             })
             
             
@@ -323,10 +345,11 @@ module.exports = {
 
 
 
-                User.find({username:Fid}).then((data2)=>{
+                User.findOne({username:Fid}).then((data2)=>{
 
                    
-
+                      console.log(Fid)
+                      console.log(data2);
 
                     if(data2.private)
                     {
@@ -334,7 +357,7 @@ module.exports = {
                             $addToSet: { requests: x }
                         }).then((data)=>{
                           
-                            console.log("done")
+                            resolve({requested:true})
                         })
                     }
                     else
@@ -342,8 +365,7 @@ module.exports = {
                         User.findOneAndUpdate({username:Fid},{
                             $addToSet: { followers: x }
                         }).then((data)=>{
-                            console.log("AGANEY ATHUM AAYI11111111111")
-                                console.log(data)
+                          
                             y={
                                 uid:data._id,
                                 username:data.username,
@@ -357,8 +379,7 @@ module.exports = {
 
                                 
 
-                                console.log("000")
-                                console.log(data)
+                              
                                 resolve({success:true,data:x})
                             })
                         })
@@ -369,7 +390,6 @@ module.exports = {
                
             }).catch((err)=>{
                 console.log(err.message)
-                console.log("err occurred")
             })
            
             
@@ -391,9 +411,9 @@ module.exports = {
                 }).then((data)=>{
 
                     User.findById(data._id).then((data1)=>{
-                        console.log(data1)
+                   
                         resolve({success:true,data1})
-                        console.log("UNFOLLOWED")
+                      
                     })
                    
 
@@ -402,23 +422,27 @@ module.exports = {
             }).then(()=>{
 
                
+            }).catch((err)=>{
+                console.log(err.message);
             })
             
         })
 
     },
 
+    
+
     getAllPosts:()=>{
         return new Promise((resolve, reject) => {
             
-            Post.find({}).then((data)=>{
+            Post.find({private:false}).then((data)=>{
 
-                console.log(data)
+               
                 resolve(data)
 
             }).catch((err)=>{
 
-                console.log("err occurred")
+              
                 console.log(err.message)
             })
         })
@@ -468,5 +492,30 @@ module.exports = {
         })
     },
 
+    reportPost:(id,uid)=>{
+
+        return new Promise((resolve, reject) => {
+            
+            Post.findByIdAndUpdate(id,{
+                $addToSet:{
+                    reported:uid
+                }
+            }).then(()=>{
+                resolve({success:true})
+            }).catch((err)=>{
+                console.log(err.message)
+            })
+        })
+    },
+
+    deletePost:(id)=>{
+        return new Promise((resolve, reject) => {
+            
+            Post.findByIdAndDelete(id).then(()=>{
+
+                resolve({success:true})
+            })
+        })
+    }
     
 }

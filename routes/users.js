@@ -79,6 +79,12 @@ router.get('/allPosts',auth.userAuth,userController.getAllPosts)
 /* POST UPLOAD NEW POST. */
 router.post('/uploadpost',auth.userAuth,userController.uploadPost)
 
+/* GET REPORT POST. */
+router.get('/report/:id',auth.userAuth,userController.reportPost)
+
+/* GET DELETE POST. */
+router.get('/deletepost/:id',auth.userAuth,userController.deletePost)
+
 
 
 
