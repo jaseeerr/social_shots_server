@@ -27,7 +27,7 @@ const userSchema = new Schema({
     },
     password:{
         type:String,
-        required:true,
+        
         min:8,
         
     },
@@ -87,7 +87,8 @@ const userSchema = new Schema({
     lastverified:{
         type:Date,
         default:Date.now(),
-    }
+    },
+    createdOn:Date
 
     
   

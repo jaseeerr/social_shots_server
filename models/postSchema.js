@@ -30,7 +30,8 @@ const postSchema = new Schema({
     private:{
         type:Boolean,
         default:false
-    }
+    },
+    date:String
     
   
    

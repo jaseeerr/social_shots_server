@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const {nodeMailer} = require('../helpers/nodemailerHelper')
 const {nodeMailer1} = require('../helpers/emailUpdateMailer')
 const User = require("../models/userSchema")
+const { response } = require('express')
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const SSID = process.env.SSID
@@ -93,6 +94,16 @@ userHelper.singup(req.body).then((response)=>{
         }
         
     },
+    glogin:(req,res)=>{
+
+        console.log(req.body)
+
+        userHelper.glogin(req.body).then((response)=>{
+
+            res.json(response)
+        })
+
+    },
 
     getUserdata:(req,res)=>{
 
@@ -108,7 +119,7 @@ userHelper.singup(req.body).then((response)=>{
                 
             }
        
-            if(req.user.username==req.params.id)
+            if(req.user._id==data1._id)
             {
               data.own = true
             } 
@@ -391,6 +402,85 @@ jwt.verify(req.params.id,process.env.ACCESS_TOKEN_SECRET,(err, user)=>{
     deletePost:(req,res)=>{
 
         userHelper.deletePost(req.params.id).then((response)=>{
+
+            res.json(response)
+        })
+    },
+
+    myFeed:(req,res)=>{
+
+        userHelper.myFeed(req.user._id).then((response)=>{
+
+            res.json(response)
+        })
+    },
+
+    likePost:(req,res)=>{
+
+        userHelper.likePost(req.params.id,req.user._id).then((response)=>{
+
+            res.json(response)
+
+
+        })
+    },
+
+    unlikePost:(req,res)=>{
+
+        userHelper.unlikePost(req.params.id,req.user._id).then((response)=>{
+
+            res.json(response)
+
+
+        })
+    },
+
+    shortList:(req,res)=>{
+
+
+        userHelper.shortList(req.body).then((data)=>{
+            res.json(data)
+        })
+    },
+
+    shortList1:(req,res)=>{
+
+console.log(req.body)
+        userHelper.shortList1(req.body).then((data)=>{
+            res.json(data)
+        })
+    },              
+ 
+    comment:(req,res)=>{
+
+        console.log(req.body)
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+        const data = {
+            uid:req.user._id,
+            pid:req.body.id,
+            comment:req.body.newComment,
+            date:`${currentDay} ${month[currentMonth]} ${currentYear}`
+     
+        }
+
+        console.log(data)
+        console.log("bruh");
+
+        userHelper.comment(data).then((response)=>{
+
+            res.json(response)
+        })
+    },
+
+    deletecomment:(req,res)=>{
+
+        console.log(req.body);
+        userHelper.deletecomment(req.body).then((response)=>{
 
             res.json(response)
         })

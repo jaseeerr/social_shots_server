@@ -6,6 +6,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const SSID = process.env.SSID
 const twilio = require('twilio');
+const e = require('express');
 
 
 
@@ -15,13 +16,15 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
+            
+
             argon.hash(userdata.password).then((pass)=>{
 
               
                     const user = new User({
                       username: userdata.name.toLowerCase(),
                       email: userdata.email,
-                   
+                      createdOn:Date.now(),
                       password: pass,
                       picture: null,
                       liked: [],
@@ -123,6 +126,23 @@ module.exports = {
                 }
             })
         })
+    },
+
+    glogin:(info)=>{
+        return new Promise((resolve, reject) => {
+            
+            User.findOne({email:info.email}).then((res1)=>{
+                if(res1)
+                {
+                    resolve({exuser:true})
+                }
+                else
+                {
+                    
+                }
+            })
+        })
+
     },
 
 
@@ -417,6 +437,8 @@ module.exports = {
                     })
                    
 
+                }).catch((err)=>{
+                    console.log(err.message);
                 })
                 
             }).then(()=>{
@@ -464,29 +486,45 @@ module.exports = {
 
     uploadPost:(udata,postdata)=>{
         return new Promise((resolve, reject) => {
-            
-            const post = new Post({
-               postType:postdata.type,
-               uid:udata._id,
-               username:udata.username,
-               caption:postdata.caption,
-               profilePicture:udata.dp,
-               picture:postdata.img,
 
-              });
-            
-              post.save().then(() => {
+            const currentDate = new Date();
+const currentDay = currentDate.getDate();
+const currentMonth = currentDate.getMonth();
+const currentYear = currentDate.getFullYear();
+const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
-                      resolve({success:true})
-              
 
-                    
+            User.findById(udata._id).then((data)=>{
+
+                const post = new Post({
+                    postType:postdata.type,
+                    uid:udata._id,
+                    username:udata.username,
+                    caption:postdata.caption,
+                    profilePicture:udata.dp,
+                    picture:postdata.img,
+                    private:data.private,
+                    date:`${currentDay} ${month[currentMonth]} ${currentYear}`
+     
+                   });
+                 
+                   post.save().then(() => {
+     
+                           resolve({success:true})
+                   
+     
+                         
+     
+                     
+                   }).catch((err)=>{
+                     console.log(err.message)
+                     resolve({success:false})
+                   })
 
                 
-              }).catch((err)=>{
-                console.log(err.message)
-                resolve({success:false})
-              })
+            })
+            
+         
         }).catch((err)=>{
             console.log(err.message)
         })
@@ -514,6 +552,165 @@ module.exports = {
             Post.findByIdAndDelete(id).then(()=>{
 
                 resolve({success:true})
+            })
+        })
+    },
+
+    myFeed:(id)=>{
+        return new Promise((resolve, reject) => {
+            let arr
+            User.findById(id).then((data1)=>{
+
+                 arr = data1.following.map((x)=>{
+                    return x.uid
+                })
+
+                arr.push(id)
+
+                    
+
+                    Post.find({uid:{$in:arr}}).then((data)=>{
+
+                        data = data.reverse()
+                        resolve(data)
+
+                    })
+
+               
+
+                
+            })
+        })
+    },
+
+    likePost:(pid,uid)=>{
+        return new Promise((resolve, reject) => {
+            
+            Post.findByIdAndUpdate(pid,{
+                $addToSet:{
+                    likes:uid
+                }
+            }).then(()=>{
+                resolve({success:true})
+            }).catch((err)=>{
+                console.log(err.message)
+            })
+        })
+    },
+
+    unlikePost:(pid,uid)=>{
+        return new Promise((resolve, reject) => {
+            
+            Post.findByIdAndUpdate(pid,{
+                $pull:{
+                    likes:uid
+                }
+            }).then(()=>{
+                resolve({success:true})
+            }).catch((err)=>{
+                // console.log(err.message)
+                console.log("BLEH eERRr");
+            })
+        })
+    },
+
+    shortList:(data)=>{
+        
+        return new Promise((resolve, reject) => {
+            
+            User.find({_id:{$in:data}}).then((data1)=>{
+               
+                const data2 = data1.map((x)=>{
+                    return {uid:x._id,username:x.username,dp:x.dp}
+                })
+
+                console.log(data2)
+                resolve(data2)
+            }).catch((err)=>{
+                
+                console.log(data)
+            })
+        })
+    },
+    shortList1:(data)=>{
+        
+        return new Promise((resolve, reject) => {
+            
+            User.find({_id:{$in:data}}).then((data1)=>{
+               
+                const data2 = data1.map((x)=>{
+                    return {uid:x._id,username:x.username,dp:x.dp}
+                })
+
+                console.log(data2)
+                resolve(data2)
+            }).catch((err)=>{
+                console.log("GOYCHA MOFO");
+                console.log(data)
+            })
+        })
+    },
+
+    comment:(pdata)=>{
+
+        return new Promise((resolve, reject) => {
+
+            console.log("sad")
+
+            Post.findById(pdata.pid).then((res1)=>{
+
+                let index = res1.comments.length
+                pdata.index = index
+
+                Post.findByIdAndUpdate(pdata.pid,{
+                    $push:{
+                        comments:pdata
+                    }
+                }).then(()=>{
+                    Post.findById(pdata.pid).then((data)=>{
+    
+                        console.log(data);
+                        resolve({success:true,data})
+    
+    
+                    })
+                   
+    
+                }).catch((err)=>{
+                    console.log(err.message)
+                    resolve({err:true})
+                })
+
+
+            })
+
+           
+        })
+    },
+
+    deletecomment:(pdata)=>{
+        return new Promise((resolve, reject) => {
+            Post.findById(pdata.pid).then((data)=>{
+
+                const data1 = data.comments.filter((x)=>{
+                    return x.index != pdata.cid
+                })
+
+                Post.findByIdAndUpdate(data._id,{
+                    $set:{
+                        comments:data1
+                    }
+                }).then(()=>{
+
+                    Post.findById(data._id).then((data2)=>{
+                        const data3 = data2.comments
+
+                        resolve({data3,success:true})
+                    })
+                }).catch((err)=>{
+                    console.log(err.message)
+                    resolve({success:false})
+                })
             })
         })
     }

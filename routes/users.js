@@ -17,6 +17,9 @@ router.post('/signup',userController.signup)
 /* POST LOGIN. */
 router.post('/login',userController.login)
 
+/* POST GOOGLE LOGIN. */
+router.post('/glogin',userController.glogin)
+
 /* GET CHECK USERNAME. */
 router.get('/checkusername/:id',userController.checkUsername)
 
@@ -84,6 +87,27 @@ router.get('/report/:id',auth.userAuth,userController.reportPost)
 
 /* GET DELETE POST. */
 router.get('/deletepost/:id',auth.userAuth,userController.deletePost)
+
+/* GET DELETE POST. */
+router.get('/myfeed',auth.userAuth,userController.myFeed)
+
+/* GET LIKE POST. */
+router.get('/like/:id',auth.userAuth,userController.likePost)
+
+/* GET UNLIKE POST. */
+router.get('/unlike/:id',auth.userAuth,userController.unlikePost)
+
+/* POST VIEW SHORTLIST. */
+router.post('/shortlist',auth.userAuth,userController.shortList)
+
+/* POST VIEW SHORTLIST. */
+router.post('/shortlist1',auth.userAuth,userController.shortList1)
+
+/* POST VIEW SHORTLIST. */
+router.post('/comment',auth.userAuth,userController.comment)
+
+/* POST VIEW SHORTLIST. */
+router.post('/deletecomment',auth.userAuth,userController.deletecomment)
 
 
 
