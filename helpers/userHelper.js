@@ -16,6 +16,10 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
+            if(!userdata.password)
+            {
+                resolve({err:true})
+            }
             
 
             argon.hash(userdata.password).then((pass)=>{
@@ -26,9 +30,9 @@ module.exports = {
                       email: userdata.email,
                       createdOn:Date.now(),
                       password: pass,
-                      picture: null,
-                      liked: [],
-                      products: []
+                    
+                    
+                    
                     });
                   
                     user.save().then(() => {
@@ -75,23 +79,37 @@ module.exports = {
     login:(udata)=>{
 
         return new Promise((resolve, reject) => {
+
+            console.log(udata);
             
             User.findOne({email:udata.email}).then((data)=>{
 
                 if(data)
                 {
+                    console.log(data);
+                    if(data.password==null)
+                    {
+                        console.log("GOOT");
 
-                    argon.verify(data.password,udata.password).then((pass)=>{
+                          resolve({gerr:true})
+                    }
+                    else
+                    {
+                        argon.verify(data.password,udata.password).then((pass)=>{
 
-                        if(pass)
-                        {
-                            resolve({success:true,data})
-                        }
-                        else
-                        {
-                            resolve({badpass:true})
-                        }
-                    })
+                            if(pass)
+                            {
+                                resolve({success:true,data})
+                            }
+                            else
+                            {
+                                resolve({badpass:true})
+                            }
+                        })
+                    }
+                    
+
+                  
                 }
                 else
                 {
@@ -131,14 +149,47 @@ module.exports = {
     glogin:(info)=>{
         return new Promise((resolve, reject) => {
             
-            User.findOne({email:info.email}).then((res1)=>{
-                if(res1)
+            User.findOne({email:info.email}).then((data)=>{
+                if(data)
                 {
-                    resolve({exuser:true})
+                    resolve({success:true,data})
                 }
                 else
                 {
+                    const num = Math.floor(Math.random() * 900) + 100;
+                    const temp = info.email.split("@")
+                    const name = `${temp[0]}${num}`
+                    console.log(name)
                     
+                    
+                    const user = new User({
+                        username:name.toLowerCase(),
+                        email: info.email,
+                        createdOn:Date.now(),
+                        password: null,
+                        verified:true,
+                        gAccount:true
+                        
+                      });
+                    
+                      user.save().then(() => {
+  
+
+                        User.findOne({email:info.email}).then((data)=>{
+
+                            resolve({success:true,data})
+
+
+                        })
+                        //   nodeMailer(userdata.email)
+                              
+                      
+  
+                            
+  
+                        
+                      })
+
                 }
             })
         })
@@ -567,6 +618,8 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
 
                 arr.push(id)
 
+                console.log(arr)
+
                     
 
                     Post.find({uid:{$in:arr}}).then((data)=>{
@@ -624,10 +677,10 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                     return {uid:x._id,username:x.username,dp:x.dp}
                 })
 
-                console.log(data2)
+             
                 resolve(data2)
             }).catch((err)=>{
-                
+                console.log("ERR ");
                 console.log(data)
             })
         })

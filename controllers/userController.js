@@ -83,6 +83,12 @@ userHelper.singup(req.body).then((response)=>{
                blocked:true
                 }
           }
+          else if(response.gerr)
+          {
+            data = {
+                gerr:true
+                 }
+          }
           
                           res.json(data)
             })
@@ -98,10 +104,55 @@ userHelper.singup(req.body).then((response)=>{
 
         console.log(req.body)
 
+        
         userHelper.glogin(req.body).then((response)=>{
-
-            res.json(response)
-        })
+ 
+            let data 
+            if(response.success)
+            {
+             let name = response.data.username
+             response.data.password = ""
+             const data1 = JSON.parse(JSON.stringify(response.data));
+             const token = jwt.sign(data1,process.env.ACCESS_TOKEN_SECRET)
+             if(response.data.verified)
+             {
+              data = {
+                  name:name,
+                  success:true,
+                  token:token
+              }
+             }
+             else
+             {
+              nodeMailer(response.data.email)
+                data = {
+                  notVerified:true
+                }
+             }
+              
+             
+            }
+            else if(response.baduser)
+            {
+              data = {
+                 baduser:true
+             }
+            }
+            else if(response.badpass)
+            {
+             data = {
+                 badpass:true
+             }
+            }
+            else if(response.blocked)
+            {
+             data = {
+                 blocked:true
+                  }
+            }
+            
+                            res.json(data)
+              })
 
     },
 
@@ -436,7 +487,7 @@ jwt.verify(req.params.id,process.env.ACCESS_TOKEN_SECRET,(err, user)=>{
     },
 
     shortList:(req,res)=>{
-
+              
 
         userHelper.shortList(req.body).then((data)=>{
             res.json(data)

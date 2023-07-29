@@ -12,10 +12,11 @@ const userSchema = new Schema({
         required:true,
         unique:true,
         min:2,
-        max:50,
+        max:15,
     },
     email:{
         type:String,
+        
         required:true,
         unique:true,
         max:50,
@@ -69,6 +70,10 @@ const userSchema = new Schema({
         default:false
     },
     private:{
+        type:Boolean,
+        default:false
+    },
+    gAccount:{
         type:Boolean,
         default:false
     },
