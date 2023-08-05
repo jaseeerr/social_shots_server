@@ -25,7 +25,8 @@ module.exports = {
             }
             else
             {
-                req.user = user
+              
+                req.user = userdata
        
                 next()
             }

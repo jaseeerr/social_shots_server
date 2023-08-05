@@ -80,16 +80,13 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
-            console.log(udata);
             
             User.findOne({email:udata.email}).then((data)=>{
 
                 if(data)
                 {
-                    console.log(data);
                     if(data.password==null)
                     {
-                        console.log("GOOT");
 
                           resolve({gerr:true})
                     }
@@ -159,7 +156,6 @@ module.exports = {
                     const num = Math.floor(Math.random() * 900) + 100;
                     const temp = info.email.split("@")
                     const name = `${temp[0]}${num}`
-                    console.log(name)
                     
                     
                     const user = new User({
@@ -204,8 +200,7 @@ module.exports = {
             
             User.findOne({username:id}).then((data)=>{
 
-                console.log("oooooo");
-                console.log(data)
+              
                 if(data==null)
                 {
                     data = {}
@@ -419,8 +414,7 @@ module.exports = {
                 User.findOne({username:Fid}).then((data2)=>{
 
                    
-                      console.log(Fid)
-                      console.log(data2);
+                   
 
                     if(data2.private)
                     {
@@ -681,7 +675,7 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                 resolve(data2)
             }).catch((err)=>{
                 console.log("ERR ");
-                console.log(data)
+               
             })
         })
     },
@@ -695,11 +689,10 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                     return {uid:x._id,username:x.username,dp:x.dp}
                 })
 
-                console.log(data2)
+              
                 resolve(data2)
             }).catch((err)=>{
-                console.log("GOYCHA MOFO");
-                console.log(data)
+               
             })
         })
     },
@@ -708,7 +701,6 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
 
         return new Promise((resolve, reject) => {
 
-            console.log("sad")
 
             Post.findById(pdata.pid).then((res1)=>{
 
@@ -722,7 +714,6 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                 }).then(()=>{
                     Post.findById(pdata.pid).then((data)=>{
     
-                        console.log(data);
                         resolve({success:true,data})
     
     

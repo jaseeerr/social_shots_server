@@ -58,7 +58,20 @@ module.exports = {
                     from: process.env.NODEMAILER_USER,
                     to: to1,
                     subject: 'SocialShots verifications',
-                    text: `Click on this like to update your email provided in SocialShots ${process.env.BASE_URL}verifyemail/${token}. \n do not click on this link if you didn't request to update the mail.`
+                    text: `Click on this like to update your email provided in SocialShots ${process.env.BASE_URL}verifyemail/${token}. \n do not click on this link if you didn't request to update the mail.`,
+                    html: '<body style="background-color: #121212; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 0;">' +
+                    '<header style="background-color: #333; padding: 20px; text-align: center;">' +
+                    '<h1 style="font-size: 36px;">SocialShots</h1>' +
+                    '</header>' +
+                    '<main style="padding: 20px; text-align: center;">' +
+                    '<h1 style="font-size: 36px;">Verification to update your email.</h1>' +
+                    '<p style="font-size: 18px; line-height: 1.6;">Inorder to verify that you requested to update your email on socialShots click on the button at the bottom.</p>' +
+                    '<p style="font-size: 18px; line-height: 1.6;">Don\'t click on the button below if you have not requested to update your email on socialShots.</p>' +
+                    `<a href="${process.env.BASE_URL}verifyemail/${token}" style="display: block; margin-top: 20px; background-color: #007bff; color: #fff; padding: 10px; text-align: center; text-decoration: none;">Click here to update your email</a>` +
+                    '</main>' +
+                    '</body>'
+                    
+                 
                   };
     
                   const result = await transport.sendMail(mailOptions)
@@ -70,45 +83,63 @@ module.exports = {
     
             
     
-            User.findOne({email:current}).then((response)=>{
+          User.findOne({email:to1}).then((resp1)=>{
+
+            if(resp1)
+            {
+                resolve({exemail:true})
+            }
+            else
+            {
+                User.findOne({email:current}).then((response)=>{
+
+                
     
-                if(response)
-                {
-                     
-                      const min = minutesSince(response.lastverified)
-    console.log(min)
-                      if(min>=1)
-                      {
-                       
+                    if(response)
+                    {
+                        console.log("bro");
     
-                           User.findByIdAndUpdate(response._id,{
-                            $set:{
-                                lastverified:Date.now()
-                            }
-                        }).then(()=>{
-    
-                            sendMail().then(()=>{
-    
-                                console.log("mail send")
-                                resolve({success:true})
-                             
-    
-                            }).catch((err)=>{
-                                console.log(err)
-                                console.log(err.message)
+                         
+                          const min = minutesSince(response.lastverified)
+                         console.log(min)
+                          if(min>=1)
+                          {
+                           
+        
+                               User.findByIdAndUpdate(response._id,{
+                                $set:{
+                                    lastverified:Date.now()
+                                }
+                            }).then(()=>{
+        
+                                sendMail().then(()=>{
+        
+                                    console.log("mail send")
+                                    resolve({success:true})
+                                 
+        
+                                }).catch((err)=>{
+                                    console.log(err)
+                                    console.log(err.message)
+                                })
+        
                             })
+                          }
+                          else
+        
+                          {
+                            console.log("sPAM BLOCKEd")
+                          }
+                    }
     
-                        })
-                      }
-                      else
-    
-                      {
-                        console.log("sPAM BLOCKEd")
-                      }
-                }
-            }).catch((err)=>{
-                console.log(err)
-            })
+                    console.log("nothing");
+                }).catch((err)=>{
+                    console.log(err)
+                })
+            }
+
+           
+          })
             
             
         })

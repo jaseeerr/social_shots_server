@@ -1,6 +1,6 @@
-const userHelper = require("../helpers/userHelper");
+const userHelper = require("../../helpers/userHelper");
 const jwt = require("jsonwebtoken");
-const { nodeMailer } = require("../helpers/nodemailerHelper");
+const { nodeMailer } = require("../../helpers/nodemailerHelper");
 
 
 module.exports = {
