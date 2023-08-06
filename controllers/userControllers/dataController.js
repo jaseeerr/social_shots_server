@@ -12,16 +12,12 @@ module.exports = {
           );
           let data = {
             data1,
-            own: req.user._id == data1._id ? true : false,
+            own: false,
             token: token,
           };
     
-          let x = req.user._id;
-          x = toString(x);
-          let y = data1._id;
-          y = toString(y);
-    
-          if (x == y) {
+        
+          if (req.user.username == data1.username) {
             data.own = true;
           }
     

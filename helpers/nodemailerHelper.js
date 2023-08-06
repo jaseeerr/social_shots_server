@@ -53,7 +53,19 @@ module.exports = {
                 from: process.env.NODEMAILER_USER,
                 to: id,
                 subject: 'SocialShots verifications',
-                text: `Click on this like to verify your SocialShots account ${process.env.BASE_URL}verifyuser/${token}`
+                
+                html: '<body style="background-color: #121212; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 0;">' +
+                '<header style="background-color: #333; padding: 20px; text-align: center;">' +
+                '<h1 style="font-size: 36px;">SocialShots</h1>' +
+                '</header>' +
+                '<main style="padding: 20px; text-align: center;">' +
+               
+                '<p style="font-size: 18px; line-height: 1.6;text-align: center;">Thank you for joining Social Shots! We\'re thrilled to have you as part of our community. To ensure the security of your account and access all the features, please click on the "Verify Account" button below to complete your registration.</p>' +
+                '<p style="font-size: 18px;text-align: center; line-height: 1.6;">If you did not sign up for an account on Social Shots, please ignore this email.</p>' +
+                `<a href="${process.env.BASE_URL}verifyuser/${token}" style="display: block; margin-top: 20px; background-color: #007bff; color: #fff; padding: 10px; text-align: center; text-decoration: none;">Verify Account</a>` +
+                '</main>' +
+                '</body>'
+
               };
 
               const result = await transport.sendMail(mailOptions)

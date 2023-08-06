@@ -1,6 +1,6 @@
 const userHelper = require("../../helpers/userHelper");
 const jwt = require("jsonwebtoken");
-
+const Mailer = require('../../helpers/passwordUpdateMailer')
 const User = require("../../models/userSchema");
 
 module.exports = {
@@ -58,5 +58,18 @@ module.exports = {
           }
         });
       },
+
+      forgotPassword:(req,res)=>{
+
+
+        let x = req.body.email
+
+        Mailer.nodeMailer(x).then((response)=>{
+
+          res.json(response)
+        })
+      },
+
+    
 
 }

@@ -64,7 +64,7 @@ module.exports = {
                     '<h1 style="font-size: 36px;">SocialShots</h1>' +
                     '</header>' +
                     '<main style="padding: 20px; text-align: center;">' +
-                    '<h1 style="font-size: 36px;">Verification to update your email.</h1>' +
+                    '<h1 style="font-size: 36px;">Verification Mail.</h1>' +
                     '<p style="font-size: 18px; line-height: 1.6;">Inorder to verify that you requested to update your email on socialShots click on the button at the bottom.</p>' +
                     '<p style="font-size: 18px; line-height: 1.6;">Don\'t click on the button below if you have not requested to update your email on socialShots.</p>' +
                     `<a href="${process.env.BASE_URL}verifyemail/${token}" style="display: block; margin-top: 20px; background-color: #007bff; color: #fff; padding: 10px; text-align: center; text-decoration: none;">Click here to update your email</a>` +

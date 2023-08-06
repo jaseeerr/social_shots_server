@@ -1,6 +1,8 @@
 const userHelper = require("../../helpers/userHelper");
 const { nodeMailer1 } = require("../../helpers/emailUpdateMailer");
-
+const jwt = require('jsonwebtoken')
+const User = require('../../models/userSchema')
+const argon = require('argon2')
 module.exports = {
   updateUsername: (req, res) => {
     try {
@@ -51,4 +53,47 @@ module.exports = {
       res.json({ success: response });
     });
   },
+
+
+  resetPassword:(req,res)=>{
+
+    console.log(req.body)
+
+    const key = req.body.token
+
+
+    try {
+
+      const token = jwt.verify(key, process.env.ACCESS_TOKEN_SECRET)
+
+      console.log(token)
+
+      argon.hash(req.body.pass).then((pass)=>{
+
+        User.findByIdAndUpdate(token.id,{
+          $set:{
+            password:pass
+          }
+        }).then(()=>{
+          res.json({success:true})
+        })
+      })
+
+      
+    } catch (err) {
+
+      console.log(err.message);
+
+      res.json({badToken:true})
+      
+    }
+
+
+
+
+    
+
+
+  }
+  
 };

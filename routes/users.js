@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const userController = require('../controllers/userController')
 const actionController = require('../controllers/userControllers/actionController')
 const dataController = require('../controllers/userControllers/dataController')
 const verificationController = require('../controllers/userControllers/verificationController')
@@ -23,7 +22,11 @@ router.post('/glogin',registerController.glogin)
 /* GET CHECK USERNAME. */
 router.get('/checkusername/:id',userProfileController.checkUsername)
 
+/* POST FORGOT PASSWORD. */
+router.post('/forgotPassword',verificationController.forgotPassword) 
 
+/* POST SENT MAIL FOR PASSWORD CHANGE. */
+router.post('/resetPassword',userProfileController.resetPassword) 
 
 /* GET VERIFY EMAIL. */
 router.get('/verifyuser/:id',verificationController.verifyuser)
@@ -36,6 +39,7 @@ router.get('/sentotp/:id',auth.userAuth,verificationController.sentOtp)
 
 /* GET VERIFY OTP. */
 router.get('/verifyotp',auth.userAuth,verificationController.verifyOtp)
+
 
 /* GET USERDATA. */
 router.get('/profile/:id',auth.userAuth,dataController.getUserdata)
@@ -108,6 +112,7 @@ router.post('/comment',auth.userAuth,actionController.comment)
 
 /* POST DELETE COMMENT. */
 router.post('/deletecomment',auth.userAuth,actionController.deletecomment) 
+
 
 
 
