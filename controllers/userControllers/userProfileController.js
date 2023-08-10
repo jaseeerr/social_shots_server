@@ -1,5 +1,5 @@
-const userHelper = require("../../helpers/userHelper");
-const { nodeMailer1 } = require("../../helpers/emailUpdateMailer");
+const userHelper = require("../../helpers/userHelper/userHelper");
+const { nodeMailer1 } = require("../../helpers/nodeMailer/emailUpdateMailer");
 const jwt = require('jsonwebtoken')
 const User = require('../../models/userSchema')
 const argon = require('argon2')
@@ -57,7 +57,6 @@ module.exports = {
 
   resetPassword:(req,res)=>{
 
-    console.log(req.body)
 
     const key = req.body.token
 
@@ -66,7 +65,6 @@ module.exports = {
 
       const token = jwt.verify(key, process.env.ACCESS_TOKEN_SECRET)
 
-      console.log(token)
 
       argon.hash(req.body.pass).then((pass)=>{
 

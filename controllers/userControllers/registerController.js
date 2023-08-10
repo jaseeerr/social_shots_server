@@ -1,6 +1,6 @@
-const userHelper = require("../../helpers/userHelper");
+const userHelper = require("../../helpers/userHelper/userHelper");
 const jwt = require("jsonwebtoken");
-const { nodeMailer } = require("../../helpers/nodemailerHelper");
+const { nodeMailer } = require("../../helpers/nodemailer/nodemailerHelper");
 
 
 module.exports = {
@@ -53,7 +53,7 @@ module.exports = {
             gerr: true,
           };
         }
-
+     console.log(data)
         res.json(data);
       });
     } catch (error) {

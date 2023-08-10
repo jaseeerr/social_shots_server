@@ -1,4 +1,4 @@
-const userHelper = require("../../helpers/userHelper");
+const userHelper = require("../../helpers/userHelper/userHelper");
 
 const User = require("../../models/userSchema");
 
@@ -18,7 +18,7 @@ module.exports = {
   },
 
   deletePost: (req, res) => {
-    userHelper.deletePost(req.params.id).then((response) => {
+    userHelper.deletePost(req.params.id,req.user._id).then((response) => {
       res.json(response);
     });
   },

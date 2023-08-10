@@ -1,12 +1,8 @@
-const User = require('../models/userSchema')
+const User = require('../../models/userSchema')
 const argon = require('argon2')
-const Post = require('../models/postSchema')
-const {nodeMailer} = require('../helpers/nodemailerHelper')
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const SSID = process.env.SSID
+const Post = require('../../models/postSchema')
+const {nodeMailer} = require('../nodemailer/nodemailerHelper')
 const twilio = require('twilio');
-const e = require('express');
 
 
 
@@ -90,6 +86,10 @@ module.exports = {
 
                           resolve({gerr:true})
                     }
+                    else if(data.block)
+                    {
+                        resolve({blocked:true})
+                    }
                     else
                     {
                         argon.verify(data.password,udata.password).then((pass)=>{
@@ -114,19 +114,27 @@ module.exports = {
 
                         if(data1)
                         {
+                             if(data1.block)
+                            {
+                                resolve({blocked:true})
+                            }
+                            else
+                            {
+                                argon.verify(data1.password,udata.password).then((pass)=>{
         
-                            argon.verify(data1.password,udata.password).then((pass)=>{
+                                    if(pass)
+                                    {
+                                        const data = data1
+                                        resolve({success:true,data})
+                                    }
+                                    else
+                                    {
+                                        resolve({badpass:true})
+                                    }
+                                })
+                            }
         
-                                if(pass)
-                                {
-                                    const data = data1
-                                    resolve({success:true,data})
-                                }
-                                else
-                                {
-                                    resolve({badpass:true})
-                                }
-                            })
+                           
                         }
                         else
                         {
@@ -147,9 +155,17 @@ module.exports = {
         return new Promise((resolve, reject) => {
             
             User.findOne({email:info.email}).then((data)=>{
-                if(data)
+                if(data && !data.block)
                 {
-                    resolve({success:true,data})
+                    if(data.block)
+                    {
+                        resolve({blocked:true})
+                    }
+                    else
+                    {
+                        resolve({success:true,data})
+                    }
+                  
                 }
                 else
                 {
@@ -266,7 +282,7 @@ module.exports = {
     checkUsername:(uname)=>{
         return new Promise((resolve, reject) => {
             let badname = false
-            
+            uname = uname.toLowerCase()
             User.find({username:uname}).then((response)=>{
 
                 if(response.length!=0)
@@ -591,13 +607,25 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
         })
     },
 
-    deletePost:(id)=>{
+    deletePost:(id,uid)=>{
         return new Promise((resolve, reject) => {
-            
-            Post.findByIdAndDelete(id).then(()=>{
 
-                resolve({success:true})
+            Post.findById(id).then((res)=>{
+
+                if(res._id==uid)
+                {
+                    Post.findByIdAndDelete(id).then(()=>{
+
+                        resolve({success:true})
+                    })
+                }
+                else
+                {
+                    resolve({success:false})
+                }
             })
+            
+            
         })
     },
 
@@ -693,6 +721,35 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                 resolve(data2)
             }).catch((err)=>{
                
+            })
+        })
+    },
+
+    newUser:(id)=>{
+
+        return new Promise((resolve, reject) => {
+            
+            User.find({}).then((res1)=>{
+
+                let res = res1.filter((x)=>{
+
+                    let id1 = x.username
+
+                    return id1 != id
+                })
+                
+               console.log(res);
+               
+                let data = res.reverse()
+                if(res.length>3)
+                {
+                    data = res.slice(0,3)
+                }
+              
+                resolve(data)
+
+            }).catch((err)=>{
+                console.log(err.message);
             })
         })
     },

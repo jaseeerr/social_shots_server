@@ -40,6 +40,8 @@ router.get('/sentotp/:id',auth.userAuth,verificationController.sentOtp)
 /* GET VERIFY OTP. */
 router.get('/verifyotp',auth.userAuth,verificationController.verifyOtp)
 
+/* GET SUGGESTED. */
+router.get('/suggested',auth.userAuth,dataController.newUsers)
 
 /* GET USERDATA. */
 router.get('/profile/:id',auth.userAuth,dataController.getUserdata)

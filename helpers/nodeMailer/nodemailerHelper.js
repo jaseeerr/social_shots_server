@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer')
 const {google} = require('googleapis')
 const jwt = require('jsonwebtoken')
-const User = require('../models/userSchema')
+const User = require('../../models/userSchema')
 module.exports = {
 
 

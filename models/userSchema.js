@@ -56,6 +56,10 @@ const userSchema = new Schema({
         type:Array,
         default:[]
     },
+    reports:{
+        type:Array,
+        default:[]
+    },
     location:{
         type:String,
         default:"",
