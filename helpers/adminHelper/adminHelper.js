@@ -147,7 +147,8 @@ module.exports = {
                         followers: element.followers.length,
                         postCount: 0,
                         accountStatus: element.block,
-                        reports: element.reports.length
+                        reports: element.reports.length,
+                        accountType:element.private
                     }
                     temp.push(data)
                 })
