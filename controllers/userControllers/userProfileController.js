@@ -92,6 +92,14 @@ module.exports = {
     
 
 
+  },
+
+  reportAccount: async(req,res)=>{
+
+    let data = await userHelper.reportAccount(req.params.id,req.user._id)
+
+    res.json(data)
+    
   }
   
 };

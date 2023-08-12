@@ -115,6 +115,15 @@ router.post('/comment',auth.userAuth,actionController.comment)
 /* POST DELETE COMMENT. */
 router.post('/deletecomment',auth.userAuth,actionController.deletecomment) 
 
+/* GET CHAT LIST. */
+router.get('/chatlist',auth.userAuth,dataController.getChatList) 
+
+/* GET CHAT. */
+router.get('/getChat/:id',auth.userAuth,dataController.getChat) 
+
+/* GET CHAT LIST. */
+router.get('/reportAccount/:id',auth.userAuth,userProfileController.reportAccount) 
+
 
 
 

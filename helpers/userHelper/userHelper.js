@@ -3,6 +3,7 @@ const argon = require('argon2')
 const Post = require('../../models/postSchema')
 const {nodeMailer} = require('../nodemailer/nodemailerHelper')
 const twilio = require('twilio');
+const Messages = require('../../models/messageSchema')
 
 
 
@@ -545,6 +546,26 @@ module.exports = {
         })
     },
 
+    reportAccount:(id,uid)=>{
+
+        return new Promise(async(resolve, reject) => {
+            try {
+
+                await User.findByIdAndUpdate(id,{
+                    $addToSet:{
+                        reports:uid
+                    }
+                })
+
+                resolve({success:true})
+                
+            } catch (error) {
+                console.log(error.message)
+                resolve({err:true,message:"Error on report account function userhelper"})
+            }
+        })
+    },
+
     uploadPost:(udata,postdata)=>{
         return new Promise((resolve, reject) => {
 
@@ -813,6 +834,86 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                     resolve({success:false})
                 })
             })
+        })
+    },
+
+    getChatList:(id)=>{
+
+        return new Promise( async(resolve, reject) => {
+            
+
+            try {
+
+                let data1 = await Messages.find({$or:[{sender:id},{receiver:id}]})
+                let senders = data1.map(message => message.sender);
+                let receivers = data1.map(message => message.receiver);
+                senders = senders.filter((x)=>x!=id)
+                receivers = receivers.filter((x)=>x!=id)
+                let uids  = [...new Set([...senders, ...receivers])];
+                let uinfo = await User.find({ _id: { $in: uids } })
+                let list = uinfo.map((x)=>{
+                    return({
+                        id:x._id,
+                        username:x.username,
+                        dp:x.dp,
+                    })
+                })
+
+                console.log(list)
+        
+              
+                let data = {
+                    list:list,
+                    myId : id
+                }
+                resolve(data)
+
+
+                
+            } catch (error) {
+                console.log(error.message)
+                resolve({err:true,message:"error on getchatlist function"})
+            }
+        })
+    },
+
+    getChat:(fid,id)=>{
+
+        return new Promise( async(resolve, reject) => {
+            
+
+            try {
+
+                let content = await Messages.find({
+                    $or: [
+                      { $and: [{ sender: id }, { receiver: fid }] },
+                      { $and: [{ sender: fid }, { receiver: id }] }
+                    ]
+                  }).sort({ date: 1 });
+                // content = content.reverse()
+                let senderInfo = await User.findById(id)
+                let receiverInfo = await User.findById(fid)
+                
+                let data =  {
+                    content:content,
+                    // senderName:senderInfo.username,
+                    // senderDp:senderInfo.dp,
+                    senderId:id,
+                    receiverId:fid,
+                    receiverName:receiverInfo.username,
+                    receiverDp:receiverInfo.dp
+                }
+
+
+              
+                resolve(data)
+
+
+                
+            } catch (error) {
+                console.log(error.message)
+                resolve({err:true,message:"error on getchat function"})
+            }
         })
     }
     

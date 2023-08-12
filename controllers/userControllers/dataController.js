@@ -69,5 +69,17 @@ module.exports = {
 
       res.json(data)
     })
+  },
+
+  getChatList: async (req,res)=>{
+    let data = await userHelper.getChatList(req.user._id)
+
+    res.json(data)
+  },
+
+  getChat:async(req,res)=>{
+
+    let data = await userHelper.getChat(req.params.id,req.user._id)
+    res.json(data)
   }
 };
