@@ -1,5 +1,5 @@
 const userHelper = require("../../helpers/userHelper/userHelper");
-
+const Message = require('../../models/messageSchema')
 const User = require("../../models/userSchema");
 
 
@@ -107,4 +107,57 @@ module.exports = {
       res.json(response);
     });
   },
+
+  markSeen:async (req, res) => {
+    console.log(req.body)
+    const { receiver1, sender1 } = req.body;
+
+    try {
+      const t = await   Message.find(
+        {
+           
+             sender: sender1,
+              receiver: receiver1 
+               
+            
+        }
+       
+    )
+      
+    if(sender1)
+    {
+     
+ 
+
+
+
+      await Message.updateMany(
+        {
+            $and: [
+                { sender: sender1 },
+                { receiver: receiver1 },
+               
+            ]
+        },
+        { $set: { seenByReceiver: true } }
+    )
+   
+    console.log(t)
+      console.log("Done")
+
+      res.status(200).json({ success: true });
+
+
+    }
+
+    
+       
+    } catch (error) {
+         res.status(500).json({ error: 'Failed to mark messages as seen.' });
+    }
+},
+
+
+
+
 };

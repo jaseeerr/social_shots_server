@@ -124,6 +124,9 @@ router.get('/getChat/:id',auth.userAuth,dataController.getChat)
 /* GET CHAT LIST. */
 router.get('/reportAccount/:id',auth.userAuth,userProfileController.reportAccount) 
 
+/* POST MESSAGE SEEN. */
+router.post('/mark-messages-as-seen',auth.userAuth,actionController.markSeen) 
+
 
 
 

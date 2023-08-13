@@ -23,6 +23,15 @@ module.exports = function (server) {
       console.log("A user disconnected");
     });
 
+     //  Message Seen
+     socket.on("message_seen", (data) => {
+     console.log(data)
+     console.log("MESSAGE SEEEN")
+     socket.to(data.receiver).emit("message_seen",data)
+
+
+    });
+
     // Send Message
     socket.on("send_message", (data) => {
       const newMessage = new Message({
