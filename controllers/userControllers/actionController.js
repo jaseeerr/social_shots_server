@@ -57,6 +57,7 @@ module.exports = {
 
   likePost: (req, res) => {
     userHelper.likePost(req.params.id, req.user._id).then((response) => {
+      
       res.json(response);
     });
   },
@@ -109,20 +110,13 @@ module.exports = {
   },
 
   markSeen:async (req, res) => {
+
+    console.log("mess")
     console.log(req.body)
     const { receiver1, sender1 } = req.body;
 
     try {
-      const t = await   Message.find(
-        {
-           
-             sender: sender1,
-              receiver: receiver1 
-               
-            
-        }
-       
-    )
+    
       
     if(sender1)
     {
@@ -141,9 +135,7 @@ module.exports = {
         },
         { $set: { seenByReceiver: true } }
     )
-   
-    console.log(t)
-      console.log("Done")
+
 
       res.status(200).json({ success: true });
 

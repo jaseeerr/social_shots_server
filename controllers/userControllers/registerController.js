@@ -29,6 +29,7 @@ module.exports = {
               name: name,
               success: true,
               token: token,
+              data:response.data
             };
           } else {
             nodeMailer(response.data.email);
@@ -53,7 +54,6 @@ module.exports = {
             gerr: true,
           };
         }
-     console.log(data)
         res.json(data);
       });
     } catch (error) {

@@ -15,8 +15,6 @@ module.exports = {
         
         Admin.findOne({username:data.email}).then((res)=>{
 
-            console.log(data);
-            console.log(res)
             if(res)
             {
                 if(res.password==data.password)

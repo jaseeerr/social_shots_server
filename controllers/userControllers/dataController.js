@@ -80,6 +80,22 @@ module.exports = {
   getChat:async(req,res)=>{
 
     let data = await userHelper.getChat(req.params.id,req.user._id)
+   
+    res.json(data)
+  },
+  notifyCount:async(req,res)=>{
+    let data = await userHelper.notifyCount(req.user._id)
+  
+    res.json(data)
+  },
+  messageCount:async(req,res)=>{
+    let data = await userHelper.messageCount(req.user._id)
+  
+    res.json(data)
+  },
+  getNotification:async(req,res)=>{
+    let data = await userHelper.getNotification(req.user._id)
     res.json(data)
   }
+
 };

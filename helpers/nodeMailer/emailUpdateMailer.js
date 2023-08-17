@@ -10,7 +10,6 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
 
-            console.log(current,to1)
 
             function minutesSince(date) {
                 // Get the current date and time.
@@ -97,11 +96,9 @@ module.exports = {
     
                     if(response)
                     {
-                        console.log("bro");
     
                          
                           const min = minutesSince(response.lastverified)
-                         console.log(min)
                           if(min>=1)
                           {
                            

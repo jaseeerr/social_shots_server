@@ -4,7 +4,7 @@ const Post = require('../../models/postSchema')
 const {nodeMailer} = require('../nodemailer/nodemailerHelper')
 const twilio = require('twilio');
 const Messages = require('../../models/messageSchema')
-
+const Notification = require('../../models/notificationSchema')
 
 
 module.exports = {
@@ -235,8 +235,15 @@ module.exports = {
         return new Promise((resolve, reject) => {
         
             User.findById(id).then((data)=>{
-            
-                resolve(data)
+                
+      
+
+         
+
+            resolve(data)
+
+      
+                
             })
         })
 
@@ -661,7 +668,6 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
 
                 arr.push(id)
 
-                console.log(arr)
 
                     
 
@@ -759,7 +765,6 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                     return id1 != id
                 })
                 
-               console.log(res);
                
                 let data = res.reverse()
                 if(res.length>3)
@@ -856,12 +861,22 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
                         id:x._id,
                         username:x.username,
                         dp:x.dp,
+                        newMessage:false
                     })
                 })
-
-                console.log(list)
-        
+                const x = await Messages.distinct('sender', { receiver: id, seenByReceiver: false });
               
+                x.forEach(element => {
+                    list.forEach(element1 => {
+                       if(element==element1.id)
+                       {
+                        element1.newMessage = true
+                       }
+                        
+                    });
+                });
+              
+                console.log(list)
                 let data = {
                     list:list,
                     myId : id
@@ -913,6 +928,52 @@ const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'
             } catch (error) {
                 console.log(error.message)
                 resolve({err:true,message:"error on getchat function"})
+            }
+        })
+    },
+
+    notifyCount:(id)=>{
+
+        return new Promise(async(resolve, reject) => {
+            
+            try {
+
+                const data = await Notification.find({to:id,seen:false})
+                
+                resolve(data.length)
+            } catch (error) {
+                console.log(error.message)
+            }
+        })
+    },
+
+    messageCount:(id)=>{
+        return new Promise( async(resolve, reject) => {
+            
+            try {
+                
+                const x = await Messages.distinct('sender', { receiver: id, seenByReceiver: false });
+                console.log(x)
+                console.log("distinct_----------++++++++++++++++++++++++++++++++++++")
+                resolve(x.length)
+            } catch (error) {
+                console.log(error.messages)
+            }
+        })
+    },
+
+    getNotification:(id)=>{
+        return new Promise(async(resolve, reject) => {
+            
+            try {
+                
+                let temp = await Notification.find({ to: id }).sort({ date: -1 })
+                let uids = temp.map((x)=>x.from)
+                console.log(uids)
+                console.log(temp)
+            } catch (error) {
+                
+                console.log(error.message)
             }
         })
     }

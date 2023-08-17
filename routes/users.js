@@ -23,7 +23,7 @@ router.post('/glogin',registerController.glogin)
 router.get('/checkusername/:id',userProfileController.checkUsername)
 
 /* POST FORGOT PASSWORD. */
-router.post('/forgotPassword',verificationController.forgotPassword) 
+router.post('/forgotPassword',verificationController.forgotPassword)  
 
 /* POST SENT MAIL FOR PASSWORD CHANGE. */
 router.post('/resetPassword',userProfileController.resetPassword) 
@@ -91,6 +91,12 @@ router.post('/uploadpost',auth.userAuth,actionController.uploadPost)
 /* GET REPORT POST. */
 router.get('/report/:id',auth.userAuth,actionController.reportPost)
 
+/* GET NOTIFY COUNT. */
+router.get('/notifyCount',auth.userAuth,dataController.notifyCount)
+
+/* GET Message COUNT. */
+router.get('/messageCount',auth.userAuth,dataController.messageCount)
+
 /* GET DELETE POST. */
 router.get('/deletepost/:id',auth.userAuth,actionController.deletePost)
 
@@ -126,6 +132,9 @@ router.get('/reportAccount/:id',auth.userAuth,userProfileController.reportAccoun
 
 /* POST MESSAGE SEEN. */
 router.post('/mark-messages-as-seen',auth.userAuth,actionController.markSeen) 
+
+/* GET NOTIFICATION. */
+router.get('/getNotification',auth.userAuth,dataController.getNotification) 
 
 
 
