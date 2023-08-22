@@ -75,6 +75,12 @@ router.get('/updateactype/:id',auth.userAuth,userProfileController.updateactype)
 /* GET FOLLOW. */
 router.get('/follow/:id',auth.userAuth,actionController.follow)
 
+/* GET Accept Request. */
+router.get('/accept/:id',auth.userAuth,actionController.acceptRequest)
+
+/* GET Decline Request. */
+router.get('/decline/:id',auth.userAuth,actionController.declineRequest)
+
 /* GET UNFOLLOW. */
 router.get('/unfollow/:id',auth.userAuth,actionController.unfollow)
 
@@ -85,8 +91,15 @@ router.get('/search',auth.userAuth,actionController.search)
 router.get('/allPosts',auth.userAuth,dataController.getAllPosts)
 
 
+/* GET STORIES. */
+router.get('/getstories',auth.userAuth,dataController.getStories)
+
+
 /* POST UPLOAD NEW POST. */
 router.post('/uploadpost',auth.userAuth,actionController.uploadPost)
+
+/* POST UPLOAD NEW STORY. */
+router.post('/uploadstory',auth.userAuth,actionController.uploadStory)
 
 /* GET REPORT POST. */
 router.get('/report/:id',auth.userAuth,actionController.reportPost)

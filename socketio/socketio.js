@@ -44,7 +44,7 @@ module.exports = function (server) {
       //Notification
     socket.on("notification", async(data) => {
       
-      console.log("notification")
+      
 
      if(data.to!=data.from)
      {

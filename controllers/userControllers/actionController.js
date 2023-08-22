@@ -10,6 +10,12 @@ module.exports = {
       res.json(data);
     });
   },
+  uploadStory:async(req,res)=>{
+    console.log(req.body)
+    let data = await userHelper.uploadStory(req.user,req.body)
+    res.json(data)
+
+  },
 
   reportPost: (req, res) => {
     userHelper.reportPost(req.params.id, req.user._id).then((response) => {
@@ -27,6 +33,18 @@ module.exports = {
     userHelper.follow(req.params.id, req.user.username).then((response) => {
       res.json(response);
     });
+  },
+
+  acceptRequest:(req,res)=>{
+    userHelper.accept(req.params.id, req.user.username).then((response) => {
+      res.json(response)
+    })
+  },
+
+  declineRequest:async(req,res)=>{
+
+    let data = await userHelper.declineRequest(req.user._id,req.params.id)
+    res.json(data)
   },
 
   unfollow: (req, res) => {

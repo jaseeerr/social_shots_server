@@ -11,8 +11,9 @@ const notificationSchema = new Schema({
     img:String,
     date:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     },
+    
     seen: { type: Boolean, default: false }
     
   
