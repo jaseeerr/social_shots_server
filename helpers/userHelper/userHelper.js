@@ -2,7 +2,7 @@ const User = require("../../models/userSchema");
 const argon = require("argon2");
 const Post = require("../../models/postSchema");
 const Story = require('../../models/storySchema')
-const { nodeMailer } = require("../nodemailer/nodemailerHelper");
+const Mailer = require("../nodemailer/nodemailerHelper");
 const twilio = require("twilio");
 const Messages = require("../../models/messageSchema");
 const Notification = require("../../models/notificationSchema");
@@ -25,7 +25,7 @@ module.exports = {
         user
           .save()
           .then(() => {
-            nodeMailer(userdata.email);
+            Mailer.nodeMailer(userdata.email);
             resolve({ success: true });
           })
           .catch((error) => {
