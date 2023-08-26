@@ -642,7 +642,7 @@ module.exports = {
   deletePost: (id, uid) => {
     return new Promise((resolve, reject) => {
       Post.findById(id).then((res) => {
-        if (res._id == uid) {
+        if (res.uid == uid) {
           Post.findByIdAndDelete(id).then(() => {
             resolve({ success: true });
           });

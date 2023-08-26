@@ -90,10 +90,8 @@ router.get('/search',auth.userAuth,actionController.search)
 /* GET ALL POSTS. */
 router.get('/allPosts',auth.userAuth,dataController.getAllPosts)
 
-
 /* GET STORIES. */
 router.get('/getstories',auth.userAuth,dataController.getStories)
-
 
 /* POST UPLOAD NEW POST. */
 router.post('/uploadpost',auth.userAuth,actionController.uploadPost)
