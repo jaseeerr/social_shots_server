@@ -19,6 +19,7 @@ module.exports = function (server) {
     // Join Chat
     socket.on("join_room", (data) => {
       socket.join(data);
+      console.log(data,"joined")
    
     });
     //  Disconnect
@@ -126,37 +127,35 @@ module.exports = function (server) {
 
 
     //calling sockets
-    socket.on("incomingCall",(to)=>{
-      console.log("CALLED")
-         socket.to(to).emit("incomingCall1")
+    socket.on("outgoingCall",(data)=>{
+
+    
+         socket.to(data.id).emit("incomingCall1",data)
     })
 
-    socket.on("room:join", (data) => {
-      const { email, room } = data;
-      emailToSocketIdMap.set(email, socket.id);
-      socketidToEmailMap.set(socket.id, email);
-      io.to(room).emit("user:joined", { email, id: socket.id });
-      socket.join(room);
-      io.to(socket.id).emit("room:join", data);
-    });
 
-    socket.on("user:call", ({ to, offer }) => {
-      io.to(to).emit("incomming:call", { from: socket.id, offer });
-    });
-  
-    socket.on("call:accepted", ({ to, ans }) => {
-      io.to(to).emit("call:accepted", { from: socket.id, ans });
-    });
-  
-    socket.on("peer:nego:needed", ({ to, offer }) => {
-      console.log("peer:nego:needed", offer);
-      io.to(to).emit("peer:nego:needed", { from: socket.id, offer });
-    });
-  
-    socket.on("peer:nego:done", ({ to, ans }) => {
-      console.log("peer:nego:done", ans);
-      io.to(to).emit("peer:nego:final", { from: socket.id, ans });
-    });
+    socket.on('endCall',(data)=>{
+      console.log(data)
+      console.log('end call')
+      socket.to(data.fid).emit('endCall1',data)
+    })
+
+    socket.on('lineBusy',(id)=>{
+        socket.to(id).emit('lineBusy1')
+    })
+
+    socket.on('rejectCall',(to)=>{
+      socket.to(to).emit('rejectedCall')
+    })
+
+    socket.on('acceptCall',(to)=>{
+      socket.to(to).emit('acceptedCall')
+    })
+
+    socket.on('joinCall',(data)=>{
+
+      socket.to(data.fid).emit('joinCall1',data)
+    })
 
 
 
