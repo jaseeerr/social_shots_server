@@ -228,6 +228,8 @@ module.exports = {
   },
 
   updateUsername: (id, uname) => {
+    console.log(id)
+    console.log(uname)
     return new Promise((resolve, reject) => {
       User.findByIdAndUpdate(id, {
         $set: {
@@ -300,7 +302,7 @@ module.exports = {
 
       try {
         await Story.findByIdAndUpdate(id,{
-          $push:{views:uid}
+          $addToSet:{views:uid}
         })
         resolve({success:true})
       } catch (error) {
