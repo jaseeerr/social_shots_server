@@ -29,6 +29,19 @@ module.exports = {
     });
   },
 
+  expiredstories:async(req,res)=>{
+
+
+    let data = await userHelper.expiredstories(req.body)
+    res.json(data)
+  },
+
+  storyview:async(req,res)=>{
+    let data = await userHelper.storyview(req.params.id,req.user._id)
+    console.log("story update***********************************************************************************************")
+    res.json(data)
+  },
+
   follow: (req, res) => {
     userHelper.follow(req.params.id, req.user.username).then((response) => {
       res.json(response);

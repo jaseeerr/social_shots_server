@@ -280,7 +280,37 @@ module.exports = {
       });
     });
   },
+  expiredstories:(data)=>{
 
+    return new Promise(async(resolve, reject) => {
+
+    
+      try {
+        await Story.deleteMany({ _id: { $in: data } })
+        resolve({success:true})
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  },
+
+  storyview:(id,uid)=>{
+
+    return new Promise(async(resolve,reject)=>{
+
+      try {
+        await Story.findByIdAndUpdate(id,{
+          $push:{views:uid}
+        })
+        resolve({success:true})
+      } catch (error) {
+        console.log(error)
+        resolve({success:false})
+      }
+   
+
+    })
+  },
   follow: (Fid, id) => {
     return new Promise((resolve, reject) => {
       let x = {};
@@ -735,7 +765,7 @@ module.exports = {
 
   newUser: (id) => {
     return new Promise((resolve, reject) => {
-      User.find({})
+      User.find({verified:true})
         .then((res1) => {
           let res = res1.filter((x) => {
             let id1 = x.username;

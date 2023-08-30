@@ -72,6 +72,12 @@ router.get('/updatebio/:id',auth.userAuth,userProfileController.updatebio)
 /* GET UPDATE AC TYPE. */
 router.get('/updateactype/:id',auth.userAuth,userProfileController.updateactype)
 
+/* POST DELETE EXPIRED STORIES. */
+router.post('/expiredstories',auth.userAuth,actionController.expiredstories)
+
+/* GET ADD STORY VIEW. */
+router.get('/storyview/:id',auth.userAuth,actionController.storyview)
+
 /* GET FOLLOW. */
 router.get('/follow/:id',auth.userAuth,actionController.follow)
 
