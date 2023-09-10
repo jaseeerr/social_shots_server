@@ -11,7 +11,6 @@ module.exports = {
     });
   },
   uploadStory:async(req,res)=>{
-    console.log(req.body)
     let data = await userHelper.uploadStory(req.user,req.body)
     res.json(data)
 
@@ -38,7 +37,6 @@ module.exports = {
 
   storyview:async(req,res)=>{
     let data = await userHelper.storyview(req.params.id,req.user._id)
-    console.log("story update***********************************************************************************************")
     res.json(data)
   },
 
@@ -142,8 +140,7 @@ module.exports = {
 
   markSeen:async (req, res) => {
 
-    console.log("mess")
-    console.log(req.body)
+    
     const { receiver1, sender1 } = req.body;
 
     try {

@@ -113,7 +113,7 @@ console.log(min)
 
               {
                 console.log("sPAM BLOCKEd")
-               
+                resolve({spam:true})
   
             }
         }

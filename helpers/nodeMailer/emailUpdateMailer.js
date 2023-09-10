@@ -129,7 +129,7 @@ module.exports = {
                           }
                     }
     
-                    console.log("nothing");
+                    
                 }).catch((err)=>{
                     console.log(err)
                 })

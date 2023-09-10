@@ -66,6 +66,7 @@ module.exports = {
 
         Mailer.nodeMailer(x).then((response)=>{
 
+         
           res.json(response)
         })
       },

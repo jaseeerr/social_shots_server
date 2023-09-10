@@ -96,7 +96,6 @@ module.exports = {
   },
   getNotification: async (req, res) => {
     let data = await userHelper.getNotification(req.user._id);
-    console.log(data);
     res.json(data);
   },
 };
