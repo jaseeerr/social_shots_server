@@ -9,6 +9,11 @@ const auth = require('../Auth/auth')
 
 
 
+/* GET TEST */
+router.post('/test101',registerController.test)
+
+/* POST USERINFO */
+router.post('/visitors',dataController.visitors)
 
 /* POST SIGN UP. */
 router.post('/signup',registerController.signup)

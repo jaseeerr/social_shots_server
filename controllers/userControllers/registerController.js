@@ -4,7 +4,9 @@ const { nodeMailer } = require("../../helpers/userHelper/nodeMailerHelper");
 
 
 module.exports = {
-  test: async (req, res) => {},
+  test: async (req, res) => {
+    console.log("************\n&&&&&&&&&&\n^^^^^^^^^^^^^^^^\n%%%%%%%%%%%%%%%%%%%%%%%%%%")
+  },
 
   home: (req, res) => {
     res.send("HEY HOME REACHED");

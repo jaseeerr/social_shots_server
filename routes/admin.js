@@ -17,9 +17,6 @@ router.post('/login',registerController.login)
 /* GET DASHBOARD DATA. */
 router.get('/dashboardData',adminAuth,dataController.dashboardData)
 
-/* GET DASHBOARD DATA. */
-router.get('/allusers',adminAuth,dataController.allusers)
-
 /* GET USER DATA. */
 router.get('/allusers',adminAuth,dataController.allusers)
 
@@ -31,5 +28,8 @@ router.get('/blockuser/:id',adminAuth,actionController.blockUser)
 
 /* GET DELETE POST. */
 router.get('/deletepost/:id',adminAuth,actionController.deletePost)
+
+/* GET VISITORS INFO. */
+router.get('/visitors',adminAuth,dataController.visitors)
 
 module.exports = router;

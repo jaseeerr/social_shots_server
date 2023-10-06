@@ -17,6 +17,7 @@
     "googleapis": "^121.0.0",
     "helmet": "^7.0.0",
     "http-errors": "~1.6.3",
+    "ipinfo": "^1.5.1",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.3.1",
     "morgan": "~1.9.1",

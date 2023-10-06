@@ -20,5 +20,9 @@ module.exports = {
         let data = await adminHelper.allposts()
 
         res.json(data)
+    },
+    visitors:async(req,res)=>{
+        let data = await adminHelper.visitor()
+        res.json(data)
     }
 }

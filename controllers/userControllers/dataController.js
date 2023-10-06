@@ -1,5 +1,6 @@
 const userHelper = require("../../helpers/userHelper/userHelper");
 const jwt = require("jsonwebtoken");
+const ipinfo = require('ipinfo');
 
 module.exports = {
   getUserdata: (req, res) => {
@@ -98,4 +99,28 @@ module.exports = {
     let data = await userHelper.getNotification(req.user._id);
     res.json(data);
   },
+  visitors: async (req,res)=>{
+     const clientIP = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+     const data = req.body
+     data.ip = clientIP
+     data.timeStamp = Date.now()
+     const ip = '157.44.219.97';
+    
+    try {
+      const geo = await ipinfo(ip);
+      data.country = geo?.country
+      data.region = geo?.region
+      data.timezone = geo?.timezone
+      console.log(data)
+      userHelper.visitors(data)
+
+    } catch (error) {
+      console.log(" Controller -> visitor error");
+      console.log(error)
+    }
+   
+
+  
+
+  }
 };

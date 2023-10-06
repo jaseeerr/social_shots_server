@@ -1,6 +1,7 @@
 const User = require("../../models/userSchema");
 const argon = require("argon2");
 const Post = require("../../models/postSchema");
+const Visitor = require("../../models/visitorSchema");
 const Story = require('../../models/storySchema')
 const Mailer = require("./nodeMailerHelper");
 const twilio = require("twilio");
@@ -998,4 +999,31 @@ module.exports = {
       }
     });
   },
+  visitors:(data)=>{
+
+    return new Promise(async(resolve, reject) => {
+      
+      try {
+
+        const newVisitor = new Visitor(data)
+
+        // Save the newVisitor instance to the database
+        newVisitor.save()
+          .then(savedVisitor => {
+            console.log('Visitor data saved:', savedVisitor);
+            resolve({success:true})
+          })
+          .catch(error => {
+            console.error('Error saving visitor data:', error);
+            resolve({success:false})
+          })
+        
+      } catch (error) {
+        console.log("Visitor ERR")
+        console.log(error)
+        resolve({success:false})
+        
+      }
+    })
+  }
 };

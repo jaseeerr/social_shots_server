@@ -1,6 +1,7 @@
 const { resolveContent } = require('nodemailer/lib/shared')
 const Admin = require('../../models/adminSchema')
 const User = require("../../models/userSchema")
+const Visitor = require("../../models/visitorSchema")
 const Post = require('../../models/postSchema')
 const jwt = require('jsonwebtoken')
 
@@ -100,6 +101,17 @@ module.exports = {
             videoChart[element]++
         });
            
+        let visit = await Visitor.find({})
+        let dates3 = visit.map((x)=>x.timeStamp.getMonth())
+        let visitorsChart = [0,0,0,0,0,0,0,0,0,0,0,0]
+        dates3.forEach(x => {
+            visitorsChart[x]++
+        });
+        let visitorsCount = 0
+        visitorsChart.forEach(x=>{
+            visitorsCount = visitorsCount + x
+        })
+
 
             const data = {
                 userChart,
@@ -107,7 +119,11 @@ module.exports = {
                 videoChart,
                 userCount:data1.length,
                 photoCount,
-                videoCount
+                videoCount,
+                visitorsChart,
+                visitorsCount
+
+
             }
 
           
@@ -140,6 +156,8 @@ module.exports = {
                     let data = {
                         id:element._id,
                         username: element.username,
+                        email:element?.email,
+                        phone:element?.phone,
                         dp:element.dp,
                         following : element.following.length,
                         followers: element.followers.length,
@@ -214,6 +232,22 @@ module.exports = {
             
             console.log(error.message)
 
+        }
+
+    },
+    visitor:()=>{
+
+        try {
+
+            return new Promise(async(resolve, reject) => {
+                const data = await Visitor.find({})
+                resolve(data)
+                
+            })
+            
+        } catch (error) {
+            console.log("error on visitors admin helper")
+            console.log(error)
         }
 
     },
