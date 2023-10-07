@@ -240,7 +240,8 @@ module.exports = {
         try {
 
             return new Promise(async(resolve, reject) => {
-                const data = await Visitor.find({})
+                let data = await Visitor.find({})
+                data = data.reverse()
                 resolve(data)
                 
             })
